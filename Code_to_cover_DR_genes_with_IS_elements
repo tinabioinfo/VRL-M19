@@ -1,0 +1,52 @@
+#!/usr/bin/perl 
+#use strict;
+#use warnings;
+
+my $new = "new1"; # input file containing coordinates 
+my $old = "old1"; # file with original coordinates 
+
+#my $new = "value1"; # input file containing coordinates
+#my $old = "value2"; # file with original coordinates
+
+
+open(NEW,"<",$new) or die("Unable to open file $new: $!");
+open(OLD,"<",$old) or die("Unable to open $old: $!");
+my @new_cord = <NEW>;
+my @old_cord = <OLD>; #input stored in an array
+close(NEW);
+close(OLD);
+foreach my $nline(@new_cord)   # read new cordinate file line by line
+{
+        my @nline = split('\t', $nline);
+	chomp @nline;
+	my $nid = $nline[0];
+        my $nstart = $nline[1];
+	my $nend = $nline[2];
+	print "\n$nid\t$nstart\t$nend\t";
+	if ($nstart > $nend) { # for reverse the order of complement cordinate
+		my $rstart = $nstart;
+		my $rend = $nend;
+		$nstart = $rend;
+		$nend = $rstart;
+		#print " test comp reversed: end $rend \t start $rstart \n";
+		}
+	foreach my $oline (@old_cord) # read old cordinate file line by line
+	{
+	    my @oline = split('\t', $oline);
+	    chomp @oline;
+	    my $oid = $oline[0];
+	    my $ostart = $oline[1];
+	    my $oend = $oline[2];
+		#if ($nstart <= $ostart && $nend >= $oend) # for select a range of cordinate
+		#if ($nstart <= $ostart && $nend >= $oend || $ostart <= $nstart && $nstart <= $oend || $ostart <= $nend && $nend <= $oend)
+		#
+		if ($nstart-1000 < $ostart && $nstart > $ostart)
+		#if ($ostart+1000 < $nstart || $nend+1000 <= $ostart)
+
+	       {
+			#print"$oid \t $nstart\t$ostart \t $nend \t $oend \n";
+			print"$oid\t$ostart\t$oend\t";
+		}
+	}
+
+}
